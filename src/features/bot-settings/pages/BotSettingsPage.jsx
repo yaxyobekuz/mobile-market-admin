@@ -35,6 +35,7 @@ const BotSettingsForm = ({ config }) => {
     workingHoursEnabled,
     startHour,
     endHour,
+    timezone,
     openaiTemperature,
     systemPrompt,
     maxPhotosPerMessage,
@@ -54,6 +55,7 @@ const BotSettingsForm = ({ config }) => {
     workingHoursEnabled: config?.workingHours?.enabled ?? false,
     startHour: config?.workingHours?.startHour ?? 6,
     endHour: config?.workingHours?.endHour ?? 23,
+    timezone: config?.workingHours?.timezone ?? "Asia/Tashkent",
     openaiTemperature: config?.openai?.temperature ?? 0.3,
     systemPrompt: config?.openai?.systemPrompt ?? "",
     maxPhotosPerMessage: config?.media?.maxPhotosPerMessage ?? 10,
@@ -111,6 +113,7 @@ const BotSettingsForm = ({ config }) => {
         enabled: workingHoursEnabled,
         startHour: parseInt(startHour) || 6,
         endHour: parseInt(endHour) || 23,
+        timezone: timezone || "Asia/Tashkent",
       },
       openai: {
         temperature: parseFloat(openaiTemperature) || 0.3,
@@ -194,22 +197,32 @@ const BotSettingsForm = ({ config }) => {
             onChange={(e) => setField("workingHoursEnabled", e.target.checked)}
           />
           {workingHoursEnabled && (
-            <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <InputField
+                  label="Boshlanish soati"
+                  type="number"
+                  min={0}
+                  max={23}
+                  value={startHour}
+                  onChange={(e) => setField("startHour", e.target.value)}
+                />
+                <InputField
+                  label="Tugash soati"
+                  type="number"
+                  min={0}
+                  max={23}
+                  value={endHour}
+                  onChange={(e) => setField("endHour", e.target.value)}
+                />
+              </div>
               <InputField
-                label="Boshlanish soati"
-                type="number"
-                min={0}
-                max={23}
-                value={startHour}
-                onChange={(e) => setField("startHour", e.target.value)}
-              />
-              <InputField
-                label="Tugash soati"
-                type="number"
-                min={0}
-                max={23}
-                value={endHour}
-                onChange={(e) => setField("endHour", e.target.value)}
+                label="Vaqt mintaqasi (IANA)"
+                type="text"
+                value={timezone}
+                onChange={(e) => setField("timezone", e.target.value)}
+                placeholder="Asia/Tashkent"
+                description="IANA vaqt mintaqasi nomi (masalan: Asia/Tashkent, Europe/Berlin, UTC)"
               />
             </div>
           )}
