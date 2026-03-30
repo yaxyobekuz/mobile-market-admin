@@ -26,8 +26,14 @@ const StatisticsPage = () => {
     queryFn: () => statsAPI.getDeviceStats({ days }),
   });
 
+  const { data: channelData } = useAppQuery({
+    queryKey: statsKeys.list({ type: "channels", days }),
+    queryFn: () => statsAPI.getChannelStats({ days }),
+  });
+
   const daily = dailyData?.data || [];
   const devices = deviceData?.data || [];
+  const channelStats = channelData?.data || [];
 
   const totalSent = daily.reduce((s, d) => s + (d.sent || 0), 0);
   const totalFailed = daily.reduce((s, d) => s + (d.failed || 0), 0);
@@ -116,6 +122,36 @@ const StatisticsPage = () => {
           </div>
         </Card>
       </div>
+
+      {/* Per-Channel Stats */}
+      {channelStats.length > 0 && (
+        <Card title="Kanallar bo'yicha">
+          <div className="mt-3 divide-y divide-gray-50">
+            {channelStats.map((ch) => (
+              <div key={ch.channel} className="flex items-center gap-3 py-2.5">
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-800 truncate">{ch.channel}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    {ch.sent} yuborildi · {ch.failed} xato · {ch.skipped} o'tkazildi
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <div className="w-24 bg-gray-100 rounded-full h-1.5">
+                    <div
+                      className="bg-emerald-500 h-1.5 rounded-full"
+                      style={{ width: `${ch.successRate}%` }}
+                    />
+                  </div>
+                  <span className="text-xs font-medium text-gray-600 w-10 text-right">
+                    {ch.successRate}%
+                  </span>
+                  <span className="text-xs text-gray-400 w-8 text-right">{ch.total}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
     </div>
   );
 };
