@@ -9,6 +9,9 @@ import {
   ChevronRight,
 } from "lucide-react";
 
+// Hooks
+import { useBotStatus } from "@/shared/hooks/useBotStatus";
+
 // Router
 import { Link } from "react-router-dom";
 
@@ -57,7 +60,6 @@ import { whiteLogoIcon } from "@/shared/assets/icons";
 // API
 import { authAPI } from "@/features/auth/api/auth.api";
 
-// Hooks
 import { useIsMobile } from "@/shared/hooks/useMobile";
 
 // Navigation items
@@ -114,6 +116,7 @@ const AppSidebar = ({ ...props }) => {
 
 const Header = () => {
   const { toggleSidebar, open } = useSidebar();
+  const { connected } = useBotStatus();
 
   return (
     <SidebarHeader>
@@ -125,7 +128,7 @@ const Header = () => {
             onClick={() => toggleSidebar()}
             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
           >
-            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-gradient-to-tr from-emerald-500 to-teal-700">
+            <div className="relative flex aspect-square size-8 items-center justify-center rounded-lg bg-gradient-to-tr from-emerald-500 to-teal-700">
               <img
                 width={20}
                 height={20}
@@ -133,6 +136,8 @@ const Header = () => {
                 src={whiteLogoIcon}
                 alt="Telefon Bozor Logo"
               />
+              {/* Bot status dot */}
+              <span className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${connected ? "bg-emerald-500" : "bg-gray-400"}`} />
             </div>
 
             <div className="grid flex-1 text-left text-sm leading-tight">
