@@ -8,4 +8,7 @@ export const channelsAPI = {
   create: (data) => http.post("/api/channels", data),
   update: (id, data) => http.put(`/api/channels/${id}`, data),
   delete: (id) => http.delete(`/api/channels/${id}`),
+  setRole: (id, role) => http.put(`/api/channels/${id}/role`, { role }),
+  syncFromTelegram: () => http.post("/api/channels/sync"),
+  getBotStatus: () => http.get("/api/channels/bot-status"),
 };
